@@ -159,14 +159,13 @@
           <div class="opt" data-val="Sí">🌷 Sí</div>
           <div class="opt" data-val="Claro">💕 Claro</div>
           <div class="opt" data-val="MeGustaría">😊 Me gustaría</div>
-          <div class="opt" data-val="Quizás">🌙 Quizás… cuando el momento sea perfecto</div>
         </div>
         <input type="hidden" name="¿Aceptarías compartir un momento especial conmigo?" id="respuesta1">
       </div>
       <div class="step" id="step2">
         <div class="question"><strong>2)</strong> ¿Preferirías que yo elija la hora y el lugar? 💞</div>
         <div class="options">
-          <div class="opt" data-val="Sí">🕓 Sí</div>
+          <div class="opt" data-val="Sí">🕓 Ya tengo uno en mente</div>
           <div class="opt" data-val="Encargo">📍 Te lo encargo a ti</div>
         </div>
         <input type="hidden" name="¿Preferirías que yo elija la hora y el lugar?" id="preferencia">
@@ -264,7 +263,7 @@ document.querySelectorAll('.options').forEach(g=>{
       document.getElementById('preferencia').value = el.dataset.val;
       extraSi.style.display = 'none';
       extraEncargo.style.display = 'none';
-      if(el.dataset.val==='Sí') extraSi.style.display='block';
+      if(el.dataset.val==='Ya tengo uno en mente') extraSi.style.display='block';
       if(el.dataset.val==='Encargo') extraEncargo.style.display='block';
     }
   });
@@ -316,3 +315,4 @@ form.addEventListener('submit', async e=>{
 </script>
 </body>
 </html>
+
