@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>¿Salimos...? — Mensaje bonito</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg1:#0f1724;
+    --accent1:#ff88c8;
+    --accent2:#9b7bff;
+    --soft:#ffdff0;
+    --glass: rgba(255,255,255,0.08);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:"Poppins",system-ui,Arial;
+    background: linear-gradient(180deg,#0b1020 0%, #171a2b 60%);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    overflow:hidden;
+    flex-direction:column;
+  }
+
+  #inicio{position:fixed;inset:0;background:radial-gradient(circle at center,#14172a 0%,#090b15 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:100;color:white;text-align:center;}
+  #inicio h1{font-family:"Dancing Script",cursive;font-size:40px;margin-bottom:18px;color:var(--soft);}
+  #btnInicio{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;padding:14px 24px;border-radius:14px;color:white;font-weight:600;font-size:18px;cursor:pointer;box-shadow:0 10px 30px rgba(155,123,255,0.2);transition:transform .2s;}
+  #btnInicio:hover{transform:scale(1.05);}
+
+  .card{width:100%;max-width:760px;border-radius:18px;padding:22px;background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));box-shadow: 0 20px 50px rgba(5,8,20,0.7);position:relative;overflow:visible;display:none;}
+
+  .header{display:flex;gap:16px;align-items:center;}
+  .logo{width:64px;height:64px;border-radius:14px;background: linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 30px rgba(155,123,255,0.18);}
+  .title{font-family:"Dancing Script",cursive;font-size:28px;color:var(--soft);margin:0;}
+  .subtitle{font-size:13px;color:rgba(255,255,255,0.7);margin-top:6px}
+
+  .main{margin-top:18px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;}
+  .left{flex:1 1 320px;min-width:240px;}
+  .right{width:320px;min-width:240px;}
+
+  .intro{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);color: #eaf6ff;line-height:1.35;}
+  .intro p{margin:0 0 8px 0;font-size:15px}
+  .intro .soft{color:rgba(255,255,255,0.75);font-size:14px}
+
+  .cta{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{border:0;padding:12px 16px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;font-weight:600;cursor:pointer;box-shadow:0 12px 26px rgba(155,123,255,0.12);transition:transform .18s, box-shadow .18s;}
+  .btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(155,123,255,0.22)}
+  .btn.secondary{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.04)}
+
+  .preview{background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border-radius:12px;padding:14px;height:100%;}
+  .heart-wrap{display:flex;align-items:center;justify-content:center;height:120px}
+  .heart{font-size:48px;filter:drop-shadow(0 8px 20px rgba(255,90,150,0.18));animation:beat 1.3s infinite;}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.28)}}
+
+  .particles{position:absolute;inset:0;pointer-events:none}
+  .particle{position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.12);opacity:0.9;animation:rise linear infinite}
+  @keyframes rise{from{transform:translateY(40vh) scale(.7)}to{transform:translateY(-30vh) scale(1.0)}}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(2,6,20,0.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:60;padding:20px;}
+  .modal{width:100%;max-width:520px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:16px;padding:18px;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,0.6);transform-origin:center center;animation:pop .36s ease;}
+  @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal h3{font-family:"Dancing Script",cursive;font-size:24px;margin:4px 0 8px 0}
+  .modal p{font-size:15px;color:rgba(255,255,255,0.9);line-height:1.4}
+
+  .step{margin-top:12px}
+  .question{background:var(--glass);padding:12px;border-radius:12px;margin-bottom:10px;color:rgba(255,255,255,0.95)}
+  .options{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .opt{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));cursor:pointer;transition:transform .12s, box-shadow .12s;color:#fff;}
+  .opt:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,0.45)}
+  .opt.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 14px 36px rgba(155,123,255,0.18)}
+
+  textarea,input[type="date"]{width:100%;min-height:86px;border-radius:12px;padding:10px;background:rgba(255,255,255,0.02);color:#fff;border:1px solid rgba(255,255,255,0.05);resize:vertical;font-size:15px;margin-top:8px;}
+  input[type="date"]{min-height:auto}
+
+  .error{border:1px solid #ff88c8 !important;box-shadow:0 0 10px rgba(255,136,200,0.5);animation:shake 0.25s ease;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+  #alerta{
+    display:none;
+    background:linear-gradient(90deg,#ffb6da,#bbaaff);
+    color:#180a1f;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:600;
+    position:fixed;
+    top:18px;left:50%;
+    transform:translateX(-50%);
+    box-shadow:0 4px 18px rgba(255,150,200,0.3);
+    z-index:200;
+  }
+
+  .final-row{display:flex;gap:8px;margin-top:12px;align-items:center}
+  .send{flex:1;padding:12px;border-radius:12px;border:0;background:linear-gradient(90deg,#6bc4ff,#8aa4ff);color:#032033;font-weight:700;cursor:pointer;transition:transform .12s;box-shadow:0 10px 30px rgba(107,196,255,0.14)}
+  .send:active{transform:translateY(2px)}
+  .tiny{font-size:13px;color:rgba(255,255,255,0.6)}
+
+  #gracias{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(6px);}
+  #gracias .msg{background:linear-gradient(135deg,#ffb6da,#bbaaff);padding:24px 30px;border-radius:20px;max-width:400px;text-align:center;color:#18142a;font-weight:600;font-size:18px;box-shadow:0 20px 50px rgba(0,0,0,0.4);animation:pop .4s ease;}
+
+  @media (max-width:720px){.main{flex-direction:column}.right{width:100%}}
+</style>
+</head>
+<body>
+
+<div id="alerta">✨ Falta completar algunos campos 💞</div>
+
+<div id="inicio">
+  <h1>¿Lista para algo bonito? 💖</h1>
+  <button id="btnInicio">Iniciar 💫</button>
+</div>
+
+<div class="card" id="mainCard">
+  <div class="header">
+    <div class="logo">💌</div>
+    <div>
+      <h1 class="title">Una invitación suave</h1>
+      <div class="subtitle">Sin prisa, cuando tú quieras ✨</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="left">
+      <div class="intro">
+        <p>💌 Gracias por estar aquí.<br>Quiero que esto sea simple y bonito: una invitación sin presión, sólo para cuando tú te sientas libre.</p>
+        <p class="soft">Abre la ventana, deja pasar un poco de magia 🌙. <br>Quizsás el aire traiga algo que quieras decir sin palabras 💌💫</p>
+        <div class="cta">
+          <button class="btn" id="open">Tocar para ver algo bonito 💫</button>
+          <button class="btn secondary" id="playMusic">🎵 Música</button>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="preview"><div class="heart-wrap"><div class="heart">💖</div></div></div>
+    </div>
+  </div>
+  <div class="particles" id="particles"></div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3>Una cosita... 💌</h3>
+    <p>🌸 No sé si el destino existe, pero hay coincidencias que se sienten demasiado bien para ser casualidad.</p>
+ <p style="font-weight:bold; font-style:italic; color:#ffdff0; line-height:1.5;">
+  Cuando digas la fecha, será suficiente… ese día, donde sea y a la hora que sea, ahí estaré, porque quiero estar contigo 💫
+</p>
+
+    <form id="confessForm">
+      <div class="step" id="step1">
+        <div class="question"><strong>1)</strong> ¿Aceptarías compartir un momento especial conmigo? 😊</div>
+        <div class="options">
+          <div class="opt" data-val="Sí">🌷 Sí</div>
+          <div class="opt" data-val="Claro">💕 Claro</div>
+          <div class="opt" data-val="MeGustaría">😊 Me gustaría</div>
+          <div class="opt" data-val="Quizás">🌙 Quizás… cuando el momento sea perfecto</div>
+        </div>
+        <input type="hidden" name="¿Aceptarías compartir un momento especial conmigo?" id="respuesta1">
+      </div>
+      <div class="step" id="step2">
+        <div class="question"><strong>2)</strong> ¿Preferirías que yo elija la hora y el lugar? 💞</div>
+        <div class="options">
+          <div class="opt" data-val="Sí">🕓 Sí</div>
+          <div class="opt" data-val="Encargo">📍 Te lo encargo a ti</div>
+        </div>
+        <input type="hidden" name="¿Preferirías que yo elija la hora y el lugar?" id="preferencia">
+      </div>
+      <div class="step" id="extraSi" style="display:none;">
+        <div class="question">💫 ¿Podrías decidir la fecha, hora y lugar? 🌸</div>
+        <textarea name="¿Podrías decidir la fecha, hora y lugar? 🌸" placeholder="Decide la fecha y el lugar...."></textarea>
+        <label>📅 ¿Qué día te gustaría que fuera? (opcional)</label>
+        <input type="date" name="Fecha">
+      </div>
+      <div class="step" id="extraEncargo" style="display:none;">
+        <div class="question">💫 ¿Quieres decirme algo más antes de que lo prepare? 🌸</div>
+        <textarea name="¿Quieres decirme algo más antes de que lo prepare?" placeholder="Un punto(.) dice mas que mil palabras..."></textarea>
+
+      </div>
+      <div class="final-row">
+        <div class="tiny">✉️ Tu respuesta llegará directamente a mi correo.</div>
+        <button type="submit" class="send" id="sendBtn">💌 Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="gracias"><div class="msg">💖 ¡GRACIAS POR ACEPTAR! 💖<br><br>Me haces muy feliz 🌸</div></div>
+
+<audio id="bgm" src="https://res.cloudinary.com/dyrqu5qjz/video/upload/v1762052705/Rap-triste-para-improvisar_240P__nnzh8i.mp3" loop></audio>
+
+<script>
+const inicio = document.getElementById('inicio');
+const btnInicio = document.getElementById('btnInicio');
+const card = document.getElementById('mainCard');
+const bgm = document.getElementById('bgm');
+const playMusic = document.getElementById('playMusic');
+const modalBg = document.getElementById('modalBg');
+const form = document.getElementById('confessForm');
+const sendBtn = document.getElementById('sendBtn');
+const gracias = document.getElementById('gracias');
+const alerta = document.getElementById('alerta');
+const extraSi = document.getElementById('extraSi');
+const extraEncargo = document.getElementById('extraEncargo');
+
+let musicOn = false;
+
+// Inicio
+btnInicio.addEventListener('click', () => {
+  inicio.style.display = 'none';
+  card.style.display = 'block';
+  bgm.volume = 0.22;
+  bgm.play().catch(()=>{});
+  musicOn = true;
+  playMusic.textContent = ' Música ON';
+});
+
+// Música
+playMusic.addEventListener('click', () => {
+  if (!musicOn){
+    bgm.play();
+    musicOn = true;
+    playMusic.textContent = ' Música ON';
+  } else {
+    bgm.pause();
+    musicOn = false;
+    playMusic.textContent = '🎵 Música';
+  }
+});
+
+// Partículas
+const partC = document.getElementById('particles');
+for(let i=0;i<32;i++){
+  const el=document.createElement('div');
+  el.className='particle';
+  el.style.left=(Math.random()*100)+'%';
+  el.style.bottom=(Math.random()*10-10)+'vh';
+  el.style.width=(4+Math.random()*8)+'px';
+  el.style.height=el.style.width;
+  el.style.opacity=(0.15+Math.random()*0.45);
+  el.style.animationDuration=(6+Math.random()*8)+'s';
+  el.style.animationDelay=(Math.random()*4)+'s';
+  partC.appendChild(el);
+}
+
+// Modal abrir/cerrar
+document.getElementById('open').addEventListener('click',()=>modalBg.style.display='flex');
+modalBg.addEventListener('click',e=>{if(e.target===modalBg)modalBg.style.display='none';});
+
+// Selección de opciones
+document.querySelectorAll('.options').forEach(g=>{
+  g.addEventListener('click',e=>{
+    const el=e.target.closest('.opt'); if(!el) return;
+    Array.from(g.children).forEach(ch=>ch.classList.remove('active'));
+    el.classList.add('active');
+    const step = el.closest('.step');
+    if(step.id==='step1') document.getElementById('respuesta1').value = el.dataset.val;
+    if(step.id==='step2'){
+      document.getElementById('preferencia').value = el.dataset.val;
+      extraSi.style.display = 'none';
+      extraEncargo.style.display = 'none';
+      if(el.dataset.val==='Sí') extraSi.style.display='block';
+      if(el.dataset.val==='Encargo') extraEncargo.style.display='block';
+    }
+  });
+});
+
+// Formulario
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  let valido=true;
+  const r1=document.getElementById('respuesta1').value.trim();
+  const r2=document.getElementById('preferencia').value.trim();
+  const text1 = extraSi.style.display==='block'? extraSi.querySelector('textarea').value.trim():'';
+  const text2 = extraEncargo.style.display==='block'? extraEncargo.querySelector('textarea').value.trim():'';
+
+  alerta.style.display='none';
+  form.querySelectorAll('.question, textarea, input[type="date"]').forEach(el=>el.classList.remove('error'));
+
+  if(!r1){valido=false; document.getElementById('step1').querySelector('.question').classList.add('error');}
+  if(!r2){valido=false; document.getElementById('step2').querySelector('.question').classList.add('error');}
+  if(extraSi.style.display==='block' && text1===''){valido=false; extraSi.querySelector('textarea').classList.add('error');}
+  if(extraEncargo.style.display==='block' && text2===''){valido=false; extraEncargo.querySelector('textarea').classList.add('error');}
+
+  if(!valido){ alerta.style.display='block'; setTimeout(()=>alerta.style.display='none',3000); return;}
+
+  const data=new FormData(form);
+
+  try {
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Enviando...';
+    await fetch('https://formsubmit.co/ajax/kirastarcandia@gmail.com', { method: 'POST', body: data });
+
+    modalBg.style.display='none';
+    gracias.style.display='flex';
+    setTimeout(()=>gracias.style.display='none',4000);
+
+    form.reset();
+    document.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));
+    extraSi.style.display='none';
+    extraEncargo.style.display='none';
+    document.getElementById('respuesta1').value='';
+    document.getElementById('preferencia').value='';
+  } catch(err) { 
+    alert('Ocurrió un error, intenta de nuevo ❤️');
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = '💌 Enviar';
+  }
+});
+</script>
+</body>
+</html>
