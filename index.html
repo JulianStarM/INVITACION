@@ -107,6 +107,37 @@
   #gracias .msg{background:linear-gradient(135deg,#ffb6da,#bbaaff);padding:24px 30px;border-radius:20px;max-width:400px;text-align:center;color:#18142a;font-weight:600;font-size:18px;box-shadow:0 20px 50px rgba(0,0,0,0.4);animation:pop .4s ease;}
 
   @media (max-width:720px){.main{flex-direction:column}.right{width:100%}}
+
+  /* --- ESCALADO PARA DESKTOP GRANDE --- */
+  @media (min-width:1025px) {
+    body {
+      padding: 40px;
+    }
+    .card {
+      max-width: 900px;
+      padding: 30px;
+    }
+    .header .title {
+      font-size: 36px;
+    }
+    .header .subtitle {
+      font-size: 16px;
+    }
+    #inicio h1 {
+      font-size: 48px;
+    }
+    #btnInicio {
+      font-size: 20px;
+      padding: 16px 28px;
+    }
+    .intro p {
+      font-size: 16px;
+    }
+    .btn {
+      font-size: 16px;
+      padding: 14px 18px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -148,15 +179,15 @@
   <div class="modal">
     <h3>Una cosita... 💌</h3>
     <p>🌸 No sé si el destino existe, pero hay coincidencias que se sienten demasiado bien para ser casualidad.</p>
- <p style="font-weight:bold; font-style:italic; color:#ffdff0; line-height:1.5;">
-  Cuando digas la fecha, será suficiente… ese día, donde sea y a la hora que sea, ahí estaré, porque quiero estar contigo 💫
-</p>
+    <p style="font-weight:bold; font-style:italic; color:#ffdff0; line-height:1.5;">
+      Cuando digas la fecha, será suficiente… ese día, donde sea y a la hora que sea, ahí estaré, porque quiero estar contigo 💫
+    </p>
 
     <form id="confessForm">
       <div class="step" id="step1">
         <div class="question"><strong>1)</strong> ¿Aceptarías compartir un momento especial conmigo? 😊</div>
         <div class="options">
-          <div class="opt" data-val="Sí">🌷 Me encantaría</div>
+          <div class="opt" data-val="Sí">🌷 Sí</div>
           <div class="opt" data-val="Claro">💕 Claro</div>
           <div class="opt" data-val="MeGustaría">😊 Me gustaría</div>
         </div>
@@ -172,14 +203,13 @@
       </div>
       <div class="step" id="extraSi" style="display:none;">
         <div class="question">💫 ¿Podrías decidir la fecha, hora y lugar? 🌸</div>
-        <textarea name="¿Podrías decidir la fecha, hora y lugar? 🌸" placeholder="Decide la fecha y el lugar...."></textarea>
+        <textarea name="Decidir fecha y lugar..." placeholder="Decide la fecha y el lugar...."></textarea>
         <label>📅 ¿Qué día te gustaría que fuera? (opcional)</label>
         <input type="date" name="Fecha">
       </div>
       <div class="step" id="extraEncargo" style="display:none;">
         <div class="question">💫 ¿Quieres decirme algo más antes de que lo prepare? 🌸</div>
-        <textarea name="¿Quieres decirme algo más antes de que lo prepare?" placeholder="Un punto(.) dice mas que mil palabras..."></textarea>
-
+        <textarea name="Mensaje extra..." placeholder="Un punto(.) dice mas que mil palabras..."></textarea>
       </div>
       <div class="final-row">
         <div class="tiny">✉️ Tu respuesta llegará directamente a mi correo.</div>
@@ -258,13 +288,16 @@ document.querySelectorAll('.options').forEach(g=>{
     Array.from(g.children).forEach(ch=>ch.classList.remove('active'));
     el.classList.add('active');
     const step = el.closest('.step');
+
     if(step.id==='step1') document.getElementById('respuesta1').value = el.dataset.val;
+
     if(step.id==='step2'){
-      document.getElementById('preferencia').value = el.dataset.val;
+      document.getElementById('preferencia').value = el.textContent.trim();
+
       extraSi.style.display = 'none';
       extraEncargo.style.display = 'none';
-      if(el.dataset.val==='Sí') extraSi.style.display='block';
-      if(el.dataset.val==='Encargo') extraEncargo.style.display='block';
+      if(el.textContent.trim() === '🕓 Ya tengo uno en mente') extraSi.style.display = 'block';
+      if(el.textContent.trim() === '📍 Te lo encargo a ti') extraEncargo.style.display = 'block';
     }
   });
 });
